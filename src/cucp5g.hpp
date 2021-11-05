@@ -3,9 +3,4 @@
 // Copyright (c) 2021 Siddharth Sagar Barpanda.
 //
 
-#include <cstdio>
-
-int main() {
-  puts("Hello World!!");
-  return 0;
-}
+void readOptions(int, char**);
