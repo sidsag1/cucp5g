@@ -1,68 +1,41 @@
 # Project Name (executable)
 PROJECT = cucp5g
+TEST_FILE = cucp5gtests
+
 # Compiler
 CC = g++
 
-# Run Options       
-COMMANDLINE_OPTIONS = /dev/ttyS0
-
 # Compiler options during compilation
-COMPILE_OPTIONS = -ansi -pedantic -Wall
+COMPILE_OPTIONS = -pedantic -Wall -Wextra
 
-#Header include directories
-HEADERS =
-#Libraries for linking
-LIBS =
-
-# Dependency options
-DEPENDENCY_OPTIONS = -MM
-
-#-- Do not edit below this line --
-
-# Subdirs to search for additional source files
-SUBDIRS := $(shell ls -F | grep "\/" )
-DIRS := ./ $(SUBDIRS)
-SOURCE_FILES := $(foreach d, $(DIRS), $(wildcard $(d)*.cpp) )
-
-# Create an object file of every cpp file
-OBJECTS = $(patsubst %.cpp, %.o, $(SOURCE_FILES))
-
-# Dependencies
-DEPENDENCIES = $(patsubst %.cpp, %.d, $(SOURCE_FILES))
-
-# Create .d files
-%.d: %.cpp
-	$(CC) $(DEPENDENCY_OPTIONS) $< -MT "$*.o $*.d" -MF $*.d
+SRC = src
+UTILITY = src/utility
+TARGET = bin
+DEPS = $(SRC)/cucp5g.hpp $(UTILITY)/Options.hpp
+SRC_O =  $(TARGET)/Options.o $(TARGET)/cucp5g.o
+UTIL_UT = src/utility/ut
 
 # Make $(PROJECT) the default target
-all: $(DEPENDENCIES) $(PROJECT)
+all: $(PROJECT)
 
-$(PROJECT): $(OBJECTS)
-	$(CC) -o $(PROJECT) $(OBJECTS) $(LIBS)
+$(PROJECT): $(SRC_O)
+	$(CC) $(COMPILE_OPTIONS) -o $@ $^
 
-# Include dependencies (if there are any)
-ifneq "$(strip $(DEPENDENCIES))" ""
-  include $(DEPENDENCIES)
-endif
+$(TARGET)/cucp5g.o: $(SRC)/cucp5g.cpp #$(DEPS)
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<
 
-# Compile every cpp file to an object
-%.o: %.cpp
-	$(CC) -c $(COMPILE_OPTIONS) -o $@ $< $(HEADERS)
+$(TARGET)/Options.o: $(UTILITY)/Options.cpp #$(DEPS)
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<
 
-# Build & Run Project
-run: $(PROJECT)
-	./$(PROJECT) $(COMMANDLINE_OPTIONS)
+test: $(TEST_FILE)
+
+$(TEST_FILE): $(TARGET)/OptionsTest.o $(TARGET)/Options.o #$(DEPS)
+	$(CC) $(COMPILE_OPTIONS) -o $@ $^ -lgtest -lpthread
+
+$(TARGET)/OptionsTest.o: $(UTIL_UT)/OptionsTest.cpp #$(DEPS)
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<
 
 # Clean & Debug
-.PHONY: makefile-debug
-makefile-debug:
-
 .PHONY: clean
 clean:
-	rm -f $(PROJECT) $(OBJECTS)
-
-.PHONY: depclean
-depclean:
-	rm -f $(DEPENDENCIES)
-
-clean-all: clean depclean
+	rm -vrf $(TARGET)/* $(PROJECT) $(TEST_FILE)
