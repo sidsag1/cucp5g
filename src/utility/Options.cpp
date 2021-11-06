@@ -6,7 +6,7 @@
 #include <vector>
 #include "Options.hpp"
 
-Options::Options(int numOfOptions, std::vector<OptionsTypes> options)
+Options::Options(int& numOfOptions, std::vector<OptionsTypes>& options)
 {
   numOfOptions = numOfOptions;
   options = options;

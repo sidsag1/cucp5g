@@ -14,15 +14,16 @@ TARGET = bin
 DEPS = $(SRC)/cucp5g.hpp $(UTILITY)/Options.hpp
 SRC_O =  $(TARGET)/Options.o $(TARGET)/cucp5g.o
 UTIL_UT = src/utility/ut
+LIB = -I/usr/include/jsoncpp/ -ljsoncpp
 
 # Make $(PROJECT) the default target
 all: $(PROJECT)
 
 $(PROJECT): $(SRC_O)
-	$(CC) $(COMPILE_OPTIONS) -o $@ $^
+	$(CC) $(COMPILE_OPTIONS) -o $@ $^ $(LIB)
 
 $(TARGET)/cucp5g.o: $(SRC)/cucp5g.cpp #$(DEPS)
-	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<  $(LIB)
 
 $(TARGET)/Options.o: $(UTILITY)/Options.cpp #$(DEPS)
 	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<

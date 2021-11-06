@@ -14,5 +14,5 @@ private:
   int numOfOptions;
   std::vector<OptionsTypes> options;
 public:
-  Options(int, std::vector<OptionsTypes>);
+  Options(int&, std::vector<OptionsTypes>&);
 };
