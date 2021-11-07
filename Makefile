@@ -11,8 +11,7 @@ COMPILE_OPTIONS = -pedantic -Wall -Wextra
 SRC = src
 UTILITY = src/utility
 TARGET = bin
-DEPS = $(SRC)/cucp5g.hpp $(UTILITY)/Options.hpp
-SRC_O =  $(TARGET)/Options.o $(TARGET)/cucp5g.o
+SRC_O =  $(TARGET)/cucp5g.o $(TARGET)/JsonConfig.o
 UTIL_UT = src/utility/ut
 LIB = -I/usr/include/jsoncpp/ -ljsoncpp
 
@@ -22,19 +21,19 @@ all: $(PROJECT)
 $(PROJECT): $(SRC_O)
 	$(CC) $(COMPILE_OPTIONS) -o $@ $^ $(LIB)
 
-$(TARGET)/cucp5g.o: $(SRC)/cucp5g.cpp #$(DEPS)
-	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<  $(LIB)
+$(TARGET)/cucp5g.o: $(SRC)/cucp5g.cpp
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $< $(LIB)
 
-$(TARGET)/Options.o: $(UTILITY)/Options.cpp #$(DEPS)
-	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<
+$(TARGET)/JsonConfig.o: $(UTILITY)/JsonConfig.cpp
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $< $(LIB)
 
 test: $(TEST_FILE)
 
-$(TEST_FILE): $(TARGET)/OptionsTest.o $(TARGET)/Options.o #$(DEPS)
-	$(CC) $(COMPILE_OPTIONS) -o $@ $^ -lgtest -lpthread
+$(TEST_FILE): $(TARGET)/JsonConfigTest.o $(TARGET)/JsonConfig.o
+	$(CC) $(COMPILE_OPTIONS) -o $@ $^ -lgtest -lpthread $(LIB)
 
-$(TARGET)/OptionsTest.o: $(UTIL_UT)/OptionsTest.cpp #$(DEPS)
-	$(CC) $(COMPILE_OPTIONS) -c -o $@ $<
+$(TARGET)/JsonConfigTest.o: $(UTIL_UT)/JsonConfigTest.cpp
+	$(CC) $(COMPILE_OPTIONS) -c -o $@ $< $(LIB)
 
 # Clean & Debug
 .PHONY: clean

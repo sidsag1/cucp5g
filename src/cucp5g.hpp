@@ -4,4 +4,4 @@
 //
 
 void readOptions(int, char**);
-void jsonParser(char*);
+void writeJson(char*);

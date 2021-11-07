@@ -8,10 +8,9 @@
 
 #include <cstdio>
 #include <json/value.h>
-#include <json/json.h>
 #include <fstream>
 #include "cucp5g.hpp"
-#include "utility/Options.hpp"
+#include "utility/JsonConfig.hpp"
 
 int main(int argc, char **argv)
 {
@@ -25,30 +24,14 @@ void readOptions(int argc, char** argv)
     {
       puts("Please add configuration file");
     }
-  else if((argc + 1)% 2 != 0)
-    {
-      puts("Please add configuration file");
-    }
   else
     {
-      int numOfOptions = (argc + 1) / 2;
-      std::vector<OptionsTypes> options;
-      for(int i = 1; i < numOfOptions; ++i)
-	{
-	  // Assuming all are JSON files as of now
-	  options.push_back(JSON);
-	  jsonParser(argv[(i * 2)]);
-	}
-      Options optionsObj(numOfOptions, options);
+      writeJson(argv[2]);
     }
 }
 
-void jsonParser(char* jsonFile)
+void writeJson(char* jsonFile)
 {
-  Json::Value config;
-  std::ifstream config_file(jsonFile, std::ifstream::binary);  
-  config_file >> config;
-
-  // To remove
-  std::cout << config["Name"] << std::endl;
+  JsonConfig configFile;
+  configFile.writeConfig(jsonFile);
 }
