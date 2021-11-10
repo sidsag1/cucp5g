@@ -1,7 +1,7 @@
 The ambitious aim is to create a fully functioning 5G CUCP which can be deployed in a real hardware.
 
 As of now, the plan is such that it can be used for testing CUUP or DU component which needs
-a simulator for testing their products. Also, learning rust to be as safe as possible.
+a simulator for testing their products.
 
 TODO:
 -----
